@@ -49,6 +49,8 @@ const createProductItemElement = ({ sku, name, image }) => {
   return section;
 };
 
+const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
+
 const addLocal = (lista) => {
   saveCartItems(lista);
 };
@@ -57,6 +59,7 @@ const somaPrice = async () => {
     const produtos = document.getElementsByClassName('cart__item');
     let vTotal = 0;
     for (let index = 0; index < produtos.length; index += 1) {
+      console.log(parseFloat(produtos[index].innerText.split('$')[1]));
       vTotal += parseFloat(produtos[index].innerText.split('$')[1]);
     }
     valorTotal.innerText = vTotal.toFixed(2);
@@ -89,21 +92,22 @@ const createCartItemElement = async ({ name, salePrice, src }) => {
   return div;
 };
 
-// criaEvents retorna um objeto de um único item.
-const criaEvents = async () => {
-  const produto = await fetchProducts('computador');
-  produto.forEach(({ id, title, thumbnail }) => {
-    const item = createProductItemElement({ sku: id, name: title, image: thumbnail });
-    items.appendChild(item);
-  });
-};
-
 // criaElemento é responsavel por criar elementos na tela caso seja chamada sem parâmetro,
+// Casso tenha parâmetro, ela retorna um objeto de um único item.
 const criaElemento = async (elemento) => {
+  if (elemento) {
     carregamento(true);
     const element = await fetchItem(elemento);
     carregamento(false);
     return element;
+  }
+  carregamento(true);
+  const produto = await fetchProducts('computador');
+  carregamento(false);
+  produto.forEach(({ id, title, thumbnail }) => {
+    const item = createProductItemElement({ sku: id, name: title, image: thumbnail });
+    items.appendChild(item);
+  });
 };
 
 // Adiciona eventos em todos os botões, o evento e responsavel por enviar o item para o carrinho.
@@ -136,9 +140,10 @@ esvazia.addEventListener('click', () => {
   valorTotal.innerHTML = '';
 });
 
-criaEvents();
+criaElemento();
+
 window.onload = () => {
-  addEventBotoes();
   chamaLocal();
   somaPrice();
+  addEventBotoes();
 };
