@@ -89,22 +89,21 @@ const createCartItemElement = async ({ name, salePrice, src }) => {
   return div;
 };
 
-// criaElemento é responsavel por criar elementos na tela caso seja chamada sem parâmetro,
-// Casso tenha parâmetro, ela retorna um objeto de um único item.
-const criaElemento = async (elemento) => {
-  if (elemento) {
-    carregamento(true);
-    const element = await fetchItem(elemento);
-    carregamento(false);
-    return element;
-  }
-  carregamento(true);
+// criaEvents retorna um objeto de um único item.
+const criaEvents = async () => {
   const produto = await fetchProducts('computador');
-  carregamento(false);
   produto.forEach(({ id, title, thumbnail }) => {
     const item = createProductItemElement({ sku: id, name: title, image: thumbnail });
     items.appendChild(item);
   });
+};
+
+// criaElemento é responsavel por criar elementos na tela caso seja chamada sem parâmetro,
+const criaElemento = async (elemento) => {
+    carregamento(true);
+    const element = await fetchItem(elemento);
+    carregamento(false);
+    return element;
 };
 
 // Adiciona eventos em todos os botões, o evento e responsavel por enviar o item para o carrinho.
@@ -137,7 +136,7 @@ esvazia.addEventListener('click', () => {
   valorTotal.innerHTML = '';
 });
 
-criaElemento();
+criaEvents();
 window.onload = () => {
   addEventBotoes();
   chamaLocal();
