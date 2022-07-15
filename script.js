@@ -57,7 +57,6 @@ const somaPrice = async () => {
     const produtos = document.getElementsByClassName('cart__item');
     let vTotal = 0;
     for (let index = 0; index < produtos.length; index += 1) {
-      console.log(parseFloat(produtos[index].innerText.split('$')[1]));
       vTotal += parseFloat(produtos[index].innerText.split('$')[1]);
     }
     valorTotal.innerText = vTotal.toFixed(2);
@@ -139,7 +138,6 @@ esvazia.addEventListener('click', () => {
 });
 
 criaElemento();
-
 window.onload = () => {
   addEventBotoes();
   chamaLocal();
