@@ -143,4 +143,5 @@ criaElemento();
 window.onload = () => {
   addEventBotoes();
   chamaLocal();
+  somaPrice();
 };
